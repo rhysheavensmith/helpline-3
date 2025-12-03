@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHaven | Crisis Support</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #7c3aed;
+            --secondary-color: #5b21b6;
+            --accent-color: #a78bfa;
+            --bg-light: #faf5ff;
+        }
+
+        body { font-family: 'Inter', sans-serif; color: #2d3748; line-height: 1.6; }
+
+        /* Navbar */
+        .navbar { background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .navbar-brand { font-weight: 700; color: var(--primary-color); font-size: 1.5rem; }
+
+        /* Hero */
+        .hero-section {
+            position: relative;
+            background-image: url('https://images.unsplash.com/photo-1516302752625-fcc3c50ae61f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center 20%;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            color: white;
+            transition: all 0.5s ease;
+        }
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, rgba(124, 58, 237, 0.9) 0%, rgba(124, 58, 237, 0.7) 50%, rgba(124, 58, 237, 0.4) 100%);
+        }
+        .hero-content { position: relative; z-index: 2; }
+
+        #hero-headline { font-weight: 800; font-size: 3.5rem; margin-bottom: 1.5rem; line-height: 1.1; }
+
+        /* Buttons */
+        .btn-cta { padding: 1rem 2rem; border-radius: 50px; text-transform: uppercase; font-weight: 600; }
+        .btn-primary-cta { background-color: var(--accent-color); border: none; color: white; }
+        .btn-outline-cta { border: 2px solid white; color: white; margin-left: 1rem; }
+
+        /* TEST MENU STYLES */
+        #test-trigger {
+            width: 35px;
+            height: 35px;
+            color: #e2e8f0; /* Very light grey to blend in white navbar */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 15px;
+        }
+        #test-trigger:hover {
+            background: #f1f1f1;
+            color: #333;
+        }
+
+        #test-panel {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(33, 37, 41, 0.98);
+            padding: 15px;
+            border-radius: 8px;
+            z-index: 9999;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            border: 1px solid #555;
+            display: none; /* HIDDEN BY DEFAULT */
+            flex-direction: column;
+            gap: 10px;
+            width: 250px;
+        }
+
+        #test-panel.active {
+            display: flex;
+        }
+
+        .test-label { color: #fff; font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; display:block; }
+
+        #test-selector {
+            font-size: 0.85rem;
+            background-color: #2d3748;
+            color: white;
+            border: 1px solid #4a5568;
+            width: 100%;
+        }
+    </style>
+</head>
+<body id="main-body">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fa-solid fa-shield-heart me-2"></i> SafeHaven</a>
+            <div class="d-flex align-items-center">
+                <span class="d-none d-md-block me-3 text-muted hours-display">Open 24/7</span>
+                <a href="tel:0800445566" class="btn btn-outline-primary rounded-pill px-4 phone-link">Call <span class="phone-text">0800 445 566</span></a>
+
+                <!-- Hidden Test Trigger placed next to call button -->
+                <div id="test-trigger" onclick="toggleMenu()" title="Open Test Controls">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section" id="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <div class="row">
+                <div class="col-lg-7">
+                    <h1 id="hero-headline">Finding safety in uncertain times.</h1>
+                    <p class="hero-subtitle fs-5 mb-4 text-light">
+                        Caring support available <span class="hours-display">24/7</span> when you need it most.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="tel:0800445566" class="btn btn-cta btn-primary-cta phone-link">
+                            <i class="fas fa-phone-alt me-2"></i> Call <span class="phone-text">0800 445 566</span>
+                        </a>
+                        <a href="sms:3456&body=SAFE" class="btn btn-cta btn-outline-cta sms-link">
+                            <i class="fas fa-comment-alt me-2"></i> Text SAFE to <span class="sms-text">3456</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content Container -->
+    <div id="content-container">
+        <!-- News Section Injection Point (N4) -->
+        <div id="news-section-placeholder"></div>
+
+        <!-- Features Section -->
+        <section class="py-5 bg-white">
+            <div class="container py-4">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="p-4 text-center rounded shadow-sm bg-light h-100">
+                            <i class="fas fa-user-shield fa-2x text-primary mb-3"></i>
+                            <h3>Safe Space</h3>
+                            <p class="text-muted">Judgment-free support.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-4 text-center rounded shadow-sm bg-light h-100">
+                            <i class="fas fa-clock fa-2x text-primary mb-3"></i>
+                            <h3>Around the Clock</h3>
+                            <p class="text-muted">Always here when you need us.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-4 text-center rounded shadow-sm bg-light h-100">
+                            <i class="fas fa-heart fa-2x text-primary mb-3"></i>
+                            <h3>Caring Listeners</h3>
+                            <p class="text-muted">Compassionate support team.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Steps/Resources Section -->
+        <section class="py-5" style="background-color: var(--bg-light);">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <img src="https://images.unsplash.com/photo-1527613426441-4da17471b66d?ixlib=rb-4.0.3&w=800&q=80" class="img-fluid rounded shadow" alt="Support">
+                    </div>
+                    <div class="col-lg-6 mt-4 mt-lg-0">
+                        <h2>Get in touch</h2>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> <strong>Call <span class="phone-text">0800 445 566</span></strong> anytime for immediate support.</li>
+                            <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> <strong>Text <span class="sms-text">3456</span></strong> if you prefer SMS.</li>
+                            <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> <a href="https://chat.example.com" id="chat-link">Connect online</a> through our secure chat.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>SafeHaven</h5>
+                    <p class="text-muted">Test Site for AI Validation.</p>
+                    <p class="mt-3"><a href="mailto:help@safehaven.test" style="color: #a0aec0; text-decoration: none;"><i class="fas fa-envelope me-2"></i> help@safehaven.test</a></p>
+                </div>
+                <div class="col-md-6 text-md-end" id="social-container">
+                    <!-- Social icons inject here for N6 -->
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Control Panel (Hidden by default) -->
+    <div id="test-panel">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="test-label">>ê Test Scenarios</span>
+            <button onclick="toggleMenu()" class="btn btn-sm btn-link text-white text-decoration-none p-0"><i class="fas fa-times"></i></button>
+        </div>
+
+        <select id="test-selector" class="form-select form-select-sm mb-2">
+            <option value="" selected disabled>Select Scenario...</option>
+            <optgroup label="Positive Tests (Alert)">
+                <option value="R1">R1: Closure Banner</option>
+                <option value="R2">R2: Phone Change</option>
+                <option value="R3">R3: Hours Change</option>
+                <option value="R4">R4: SMS Change</option>
+                <option value="R5">R5: Combined (Phone/Hours)</option>
+                <option value="R6">R6: Chat URL</option>
+                <option value="R7">R7: Temporary Note</option>
+                <option value="R8">R8: Bad Actor Takeover</option>
+            </optgroup>
+            <optgroup label="False Positives (Ignore)">
+                <option value="N1">N1: Cookie Banner</option>
+                <option value="N2">N2: Marketing Change</option>
+                <option value="N3">N3: Analytics Script</option>
+                <option value="N4">N4: News/Events</option>
+                <option value="N5">N5: Layout/CSS</option>
+                <option value="N6">N6: Social Links</option>
+            </optgroup>
+        </select>
+
+        <div class="d-flex gap-2">
+            <button onclick="runTest()" class="btn btn-primary btn-sm w-100">Run</button>
+            <button onclick="location.reload()" class="btn btn-outline-light btn-sm" title="Reset Page">»</button>
+        </div>
+    </div>
+
+    <script>
+        // Store original page state for R8 reset
+        let originalBodyHTML = null;
+
+        function toggleMenu() {
+            const panel = document.getElementById('test-panel');
+            panel.classList.toggle('active');
+        }
+
+        function runTest() {
+            const selector = document.getElementById('test-selector');
+            const testId = selector.value;
+            if(!testId) return;
+
+            // Close menu after running to keep screenshot clean
+            toggleMenu();
+
+            switch(testId) {
+                // Positive
+                case 'R1': triggerR1(); break;
+                case 'R2': triggerR2(); break;
+                case 'R3': triggerR3(); break;
+                case 'R4': triggerR4(); break;
+                case 'R5': triggerR5(); break;
+                case 'R6': triggerR6(); break;
+                case 'R7': triggerR7(); break;
+                case 'R8': triggerR8(); break;
+                // False Positive
+                case 'N1': triggerN1(); break;
+                case 'N2': triggerN2(); break;
+                case 'N3': triggerN3(); break;
+                case 'N4': triggerN4(); break;
+                case 'N5': triggerN5(); break;
+                case 'N6': triggerN6(); break;
+            }
+        }
+
+        // Reset bad actor takeover
+        function resetBadActor() {
+            if (originalBodyHTML) {
+                document.body.innerHTML = originalBodyHTML;
+                originalBodyHTML = null;
+                // Re-attach keyboard listener after restore
+                document.addEventListener('keydown', handleEscapeKey);
+            }
+        }
+
+        // Keyboard shortcut handler
+        function handleEscapeKey(e) {
+            if (e.key === 'Escape' && originalBodyHTML) {
+                resetBadActor();
+            }
+        }
+
+        // Add escape key listener
+        document.addEventListener('keydown', handleEscapeKey);
+
+        /* ========================================
+           PRODUCTION ACTIVATION SECTION
+           ========================================
+           To activate a scenario for all visitors:
+           1. Uncomment ONE line below
+           2. Save this file
+           3. Deploy to production
+
+           To deactivate: Re-comment the line or remove it
+           ======================================== */
+
+        // window.addEventListener('load', function() {
+        //     triggerR1();  // Closure Banner
+        //     triggerR2();  // Phone Change
+        //     triggerR3();  // Hours Change
+        //     triggerR4();  // SMS Change
+        //     triggerR5();  // Combined (Phone/Hours)
+        //     triggerR6();  // Chat URL Change
+        //     triggerR7();  // Temporary Notice
+        //     triggerR8();  // Bad Actor Takeover
+        // });
+
+        // --- Positive Scenarios (R1-R8) ---
+
+        function triggerR1() {
+            const banner = document.createElement('div');
+            banner.style.cssText = 'background: #000; color: #fff; padding: 20px; text-align: center; font-size: 1.5rem; font-weight: bold; border-bottom: 5px solid red;';
+            banner.innerText = '  NOTICE: This helpline is PERMANENTLY CLOSED. Please call 111 for emergencies.';
+            document.body.prepend(banner);
+        }
+
+        function triggerR2() {
+            document.querySelectorAll('.phone-text').forEach(el => el.innerText = '0800 667 778');
+            document.querySelectorAll('.phone-link').forEach(el => el.href = 'tel:0800667778');
+        }
+
+        function triggerR3() {
+            document.querySelectorAll('.hours-display').forEach(el => el.innerText = 'Mon-Fri 9am-5pm');
+            document.querySelectorAll('.hours-short').forEach(el => el.innerText = 'Mon-Fri');
+        }
+
+        function triggerR4() {
+            document.querySelectorAll('.sms-text').forEach(el => el.innerText = '7890');
+            document.querySelectorAll('.sms-link').forEach(el => el.href = 'sms:7890&body=SAFE');
+        }
+
+        function triggerR5() {
+            triggerR2();
+            triggerR3();
+        }
+
+        function triggerR6() {
+            const chat = document.getElementById('chat-link');
+            if(chat) {
+                chat.href = "https://new-chat-provider.com/start";
+                chat.innerText = "Chat via New System";
+            }
+        }
+
+        function triggerR7() {
+            const note = document.createElement('div');
+            note.className = 'alert alert-warning text-center fw-bold rounded-0 mb-0';
+            note.innerText = 'NOTICE: We will be closed on Dec 25th for system maintenance.';
+            document.getElementById('top-banner').insertAdjacentElement('afterend', note);
+        }
+
+        function triggerR8() {
+            // Store original HTML before takeover
+            originalBodyHTML = document.body.innerHTML;
+
+            // Replace with bad actor content
+            document.body.innerHTML = `
+                <div style="background: #111; color: gold; font-family: 'Courier New', monospace; height: 100vh; text-align: center; padding-top: 100px; position: relative;">
+                    <button onclick="resetBadActor()" style="position: absolute; top: 20px; right: 20px; background: #333; color: #fff; border: 2px solid #666; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px; font-family: Arial, sans-serif; z-index: 10000;" title="Press ESC or click to restore">
+                         RESET TAKEOVER
+                    </button>
+                    <h1 style="font-size: 5rem; text-shadow: 0 0 10px red;"><° SUPER CASINO 777 <°</h1>
+                    <h2>YOU WON $1,000,000!</h2>
+                    <button style="font-size: 2rem; padding: 20px; background: red; color: white; border: none; cursor: pointer; margin-top:20px;">CLAIM NOW</button>
+                    <p style="margin-top: 50px; color: #555;">This site has been seized by the Casino Empire.</p>
+                    <p style="margin-top: 20px; color: #333; font-size: 12px;">Press ESC key to restore original page</p>
+                </div>
+            `;
+        }
+
+        // --- False Positive Scenarios (N1-N6) ---
+
+        function triggerN1() {
+            const div = document.createElement('div');
+            div.style.cssText = 'position: fixed; bottom: 0; left: 0; right: 0; background: #eee; padding: 20px; border-top: 1px solid #ccc; z-index: 9990; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);';
+            div.innerHTML = '<span class="text-dark">We use cookies to improve your experience.</span> <button class="btn btn-dark btn-sm" onclick="this.parentElement.remove()">Accept</button>';
+            document.body.appendChild(div);
+        }
+
+        function triggerN2() {
+            const hero = document.getElementById('hero');
+            hero.style.backgroundImage = "url('https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')";
+            document.getElementById('hero-headline').innerText = "Your wellbeing is our priority.";
+        }
+
+        function triggerN3() {
+            console.log("Analytics Script Injected");
+            const indicator = document.createElement('div');
+            indicator.style.cssText = 'position:fixed; top:10px; right:10px; background:lime; width:10px; height:10px; border-radius:50%; z-index:10000;';
+            indicator.title = "Analytics Script Active";
+            document.body.appendChild(indicator);
+        }
+
+        function triggerN4() {
+            const section = document.getElementById('news-section-placeholder');
+            section.innerHTML = `
+                <section class="py-5 bg-light border-bottom">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h3 class="fw-bold">Community Support Group</h3>
+                                <p class="mb-0">New peer support groups forming this month. Connect with others in a safe environment.</p>
+                            </div>
+                            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                <button class="btn btn-outline-dark">Join Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `;
+        }
+
+        function triggerN5() {
+            const container = document.getElementById('content-container');
+            container.appendChild(container.firstElementChild);
+            document.body.style.fontFamily = "'Courier New', serif";
+        }
+
+        function triggerN6() {
+            const container = document.getElementById('social-container');
+            container.innerHTML = `
+                <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
+                <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                <a href="#" class="text-white"><i class="fab fa-linkedin fa-lg"></i></a>
+            `;
+        }
+    </script>
+</body>
+</html>
